@@ -63,3 +63,20 @@ const tick = () => {
 };
 
 setInterval(tick, 1000);
+
+    //date-fns (library for work with Dates and Times)
+
+console.log(dateFns.isToday(now));
+
+//formating options
+console.log(dateFns.format(now, 'YYYY')); //YYYY - это токены из библиотеки, первый аргумент указывает на ту дату которую мы хотим отобразить в другом формате (год), а второй это токен который указывает отображать год месяц или что - то еще
+console.log(dateFns.format(now, 'MMM'));
+console.log(dateFns.format(now, 'dddd'));
+console.log(dateFns.format(now, 'Do'));
+console.log(dateFns.format(now, 'MMM Do MMMM YYYY'));
+
+//compairing dates
+const before1 = new Date('February 1 2019 7:30:59');
+
+console.log(dateFns.distanceInWords(now, before1, {addSuffix: true}));
+
