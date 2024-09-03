@@ -2,7 +2,8 @@ const cityForm = document.querySelector('form');
 const card = document.querySelector('.card');
 const details = document.querySelector('.details');
 const time = document.querySelector('img.time');
-const icon = document.querySelector('.icon img')
+const icon = document.querySelector('.icon img');
+const forecast = new Forecast();
 
 const updateUI = (data) => {
 //     console.log(data);
@@ -42,24 +43,25 @@ if(card.classList.contains('d-none')){
 
 };
 
+//Legacy код, который поправили  в chapter 15 (126) 
 
-const updateCity = async (city) => {
+// const updateCity = async (city) => {
 
-    const cityDets = await getCity(city); // ф-ции из кода "forecast.js" поскольку она тоже асинхронные , то добавляем await что бы они исполнялись в правильном порядке
-    const weather = await getWeather(cityDets.Key); // обе жти ф-ции прописаны в "forecast.js"Ю эта отправляет запрос в котором есть ключ города и получает и-цию про погоду
+//     const cityDets = await getCity(city); // ф-ции из кода "forecast.js" поскольку она тоже асинхронные , то добавляем await что бы они исполнялись в правильном порядке
+//     const weather = await getWeather(cityDets.Key); // обе жти ф-ции прописаны в "forecast.js"Ю эта отправляет запрос в котором есть ключ города и получает и-цию про погоду
 
-    return {cityDets, weather};
-    // можно просто записать сокращенно, КОГДА НАЗВАНИЕ ЗНАЧЕНИЯ ТАКОЕ ЖЕ КАК И НАЗВАНИЕ СВОЙСТВА  в таком виде:
-        // cityDets,
-        // weather
-    //В ином случае:
+//     return {cityDets, weather};
+//     // можно просто записать сокращенно, КОГДА НАЗВАНИЕ ЗНАЧЕНИЯ ТАКОЕ ЖЕ КАК И НАЗВАНИЕ СВОЙСТВА  в таком виде:
+//         // cityDets,
+//         // weather
+//     //В ином случае:
 
-    // return {
-    //     cityDets: cityDets,
-    //     weather: weather
-    // };
+//     // return {
+//     //     cityDets: cityDets,
+//     //     weather: weather
+//     // };
 
-};
+// };
 
 cityForm.addEventListener('submit', e => {
     //prevent default action
@@ -70,7 +72,7 @@ cityForm.addEventListener('submit', e => {
     cityForm.reset();
 
     //update the ui with new city
-    updateCity(city)
+    forecast.updateCity(city) //нужно убрать "forecast" что, бы проверить Legacy код 
     .then(data => updateUI(data))
     .catch(err => console.log(err));
 
@@ -81,7 +83,7 @@ cityForm.addEventListener('submit', e => {
 // chapter 14 proceed (если до этого пользователь делал поиск погоды по определенному городу. то он сохраняется в локальной памяти браузера и при заходе на страничку у нас происходит автоматический запрос по тому же городу который указан в локальной памяти)
 
 if(localStorage.getItem('city')){  // если localStorage с ключем city существует то будет производиться код, если нет то ошибка
-    updateCity(localStorage.getItem('city')) // ф-я возвращает промис
+    forecast.updateCity(localStorage.getItem('city')) // ф-я возвращает промис //нужно убрать "forecast" что, бы проверить Legacy код 
     .then(data => updateUI(data))
     .catch(err => console.log(err));
 }
