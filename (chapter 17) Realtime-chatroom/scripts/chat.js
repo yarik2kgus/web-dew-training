@@ -41,6 +41,7 @@ class Chatroom {
         //update username
         updateName(username){
             this.username = username;
+            localStorage.setItem('username', username); //что бы сохранялся никнейм измененный даже после F5
         }
 
         //update room

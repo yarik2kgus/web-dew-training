@@ -5,6 +5,9 @@ class ChatUI { // макет того как выглядит сообщение
     constructor(list) {
         this.list = list;
     }
+    clear(){
+        this.list.innerHTML = ''; //  очищает ui от старого чата, если мы сменили чат на другой
+    }
     render(data){
         const when = dateFns.distanceInWordsToNow( //метод который преобразует дату в дни ( взят из внешней билиотеки)
             data.created_at.toDate(),
