@@ -1,1 +1,0 @@
-(()=>{const o=o=>{console.log(`hello ${o}`)};o("mario"),o("shau"),o("link")})();
