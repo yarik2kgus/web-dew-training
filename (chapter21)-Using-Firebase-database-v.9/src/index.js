@@ -8,7 +8,9 @@ import {
 } from 'firebase/firestore'
 import {
   getAuth,
-  createUserWithEmailAndPassword 
+  createUserWithEmailAndPassword,
+  signOut, signInWithEmailAndPassword,
+  onAuthStateChanged
 } from 'firebase/auth'
 const firebaseConfig = {
     apiKey: "AIzaSyByQr0SKK03-holvdCQgE58VTHK1H1UedM",
@@ -41,7 +43,7 @@ const firebaseConfig = {
   );
   
   //real time collection data (only with author patrick rothfuss)
-  onSnapshot(a, (snapshot) => {
+  const unsubColone = onSnapshot(a, (snapshot) => {
     let books = []
     snapshot.docs.forEach((doc) => {
         books.push({...doc.data(), id: doc.id })
@@ -50,7 +52,7 @@ const firebaseConfig = {
   })
 
   //real time collection data (В КОНСОЛИ БУДЕТ ВЫКИДЫВАТЬ2  МАССИВА ПОТОМУ ЧТО ПРИКРЕПЛЯЕТ ТАЙМШТАМП В ФАЕРБЕЙС)
-  onSnapshot(b, (snapshot) => {
+  const unsubColtwo = onSnapshot(b, (snapshot) => {
     let books = []
     snapshot.docs.forEach((doc) => {
         books.push({...doc.data(), id: doc.id })
@@ -89,7 +91,7 @@ deleteBookForm.addEventListener('submit', (e) => {
 //get single document
 const docRef = doc(db, 'books', 'qvGVmyf0VRFcxttPDqsb')
 
-  onSnapshot(docRef, (doc) => { //подписались на конкретный документ
+  const unsubDoc = onSnapshot(docRef, (doc) => { //подписались на конкретный документ
     console.log(doc.data(), doc.id)
   })
 
@@ -125,4 +127,48 @@ signupForm.addEventListener('submit', (e) => {
     .catch((err) => {
       console.log(err.message)
     })
+})
+
+//logging in and out
+const logoutButton = document.querySelector('.logout')
+logoutButton.addEventListener('click', () => {
+  signOut(auth)
+    .then(() => {
+      // console.log('the user singed out')
+    })
+      .catch((err) => {
+        console.log(err)
+      })
+})
+
+const loginForm = document.querySelector('.login')
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+
+  const email = loginForm.email.value
+  const password = loginForm.password.value
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      // console.log('user logged in:', cred.user)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+
+})
+
+//subscribing  to auth changes
+const unsubAuth = onAuthStateChanged(auth, (user) => {
+  console.log('user status changed:', user)
+})
+
+//unsubscribing  to auth changes
+const unsubBotton = document.querySelector('.unsub')
+unsubBotton.addEventListener('click', () => {
+  console.log('unsubsribing')
+  unsubColone()
+  unsubColtwo()
+  unsubDoc()
+  unsubAuth()
 })
